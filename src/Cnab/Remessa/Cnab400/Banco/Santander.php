@@ -25,6 +25,8 @@ class Santander extends AbstractRemessa implements RemessaContract
     const OCORRENCIA_ALT_SEUNUMERO = '08';
     const OCORRENCIA_PROTESTAR = '09';
     const OCORRENCIA_SUSTAR_PROTESTO = '18';
+    const OCORRENCIA_ALT_VALOR_NOMINAL = '47';
+    const OCORRENCIA_NAO_PROTESTAR = '98';
 
     const INSTRUCAO_SEM = '00';
     const INSTRUCAO_BAIXAR_APOS_VENC_15 = '02';
@@ -185,6 +187,16 @@ class Santander extends AbstractRemessa implements RemessaContract
         }
         if ($boleto->getStatus() == $boleto::STATUS_ALTERACAO) {
             $this->add(109, 110, self::OCORRENCIA_ALT_VENCIMENTO); // ALTERAR VENCIMENTO
+        }
+        if ($boleto->getStatus() == $boleto::STATUS_ALTERACAO) {
+            $this->add(109, 110, self::OCORRENCIA_ALT_VENCIMENTO); // ALTERAR VENCIMENTO
+        }
+        if ($boleto->getStatus() == '4') {
+            $this->add(109, 110, self::OCORRENCIA_ALT_VALOR_NOMINAL); // ALTERAR VALOR NOMINAL DO TÍTULO
+        }
+        if ($boleto->getStatus() == '5') {
+            /** TODO: criar regra de validação para esse status */
+            $this->add(109, 110, self::OCORRENCIA_NAO_PROTESTAR); // NÃO PROTESTAR(ANTES DO INICIO DO CICLO DE PROTESTO)
         }
         $this->add(111, 120, Util::formatCnab('X', $boleto->getNumeroDocumento(), 10));
         $this->add(121, 126, $boleto->getDataVencimento()->format('dmy'));

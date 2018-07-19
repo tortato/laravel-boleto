@@ -211,4 +211,22 @@ class Santander  extends AbstractBoleto implements BoletoContract
             'carteira' => substr($campoLivre, 22, 3),
         ];
     }
+
+    /**
+     * Manda instrução para o banco para alterar o valor nominal de um título na posição 109 a 110
+     *
+     * @return $this
+     */
+    public function changeValorNominal(){
+        $this->status = 4;
+        return $this;
+    }
+
+    /**
+     * Manda instrução para o banco para não protestar antes do ciclo de protesto na posição 109 a 110
+     */
+    public function changeNaoProtestar(){
+        $this->status = 5;
+    }
+
 }
